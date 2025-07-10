@@ -5,7 +5,7 @@ export const FilterWrapper = styled.div`
   background-color: ${(props) => props.theme.cardBackground};
   border-radius: 12px;
   border: 1px solid ${(props) => props.theme.border};
-  padding: 1.5rem;
+  padding: 1rem;
   width: 100%;
   max-width: 1200px;
   box-sizing: border-box;
@@ -25,7 +25,6 @@ export const FilterHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   cursor: pointer;
-  margin-bottom: 0.5rem;
 
   ${media.desktopUp`
     margin-bottom: 0;
@@ -36,7 +35,7 @@ export const FilterHeader = styled.div`
 
 export const FilterTitle = styled.h2`
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 300;
   color: ${(props) => props.theme.textPrimary};
   margin: 0;
 `;
@@ -60,6 +59,7 @@ export const ToggleButton = styled.button<{ $isCollapsed: boolean }>`
 `;
 
 export const FilterOptions = styled.div<{ $isCollapsed: boolean }>`
+  margin-top: ${({ $isCollapsed }) => ($isCollapsed ? '0' : '0.5rem')};
   width: 100%;
   display: flex;
   flex-wrap: wrap;

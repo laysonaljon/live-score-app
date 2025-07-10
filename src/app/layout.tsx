@@ -32,8 +32,6 @@ const GlobalStyles = createGlobalStyle`
     background-color: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.textPrimary};
     line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     ${transition('background-color 0.3s ease, color 0.3s ease')}
   }
 
@@ -52,6 +50,7 @@ const GlobalStyles = createGlobalStyle`
   #root-layout-wrapper {
     min-height: 100vh;
     ${flexCenter('column')}
+    justify-content: flex-start;
     padding: 1rem;
     background-color: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.textPrimary};

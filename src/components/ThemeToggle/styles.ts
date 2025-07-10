@@ -1,5 +1,5 @@
 import { transition } from '../../styles/mixins';
-import { DefaultTheme, styled} from 'styled-components';
+import { DefaultTheme, styled } from 'styled-components';
 
 export const ToggleButton = styled.button<{ $theme: DefaultTheme }>`
   background: ${({ $theme }) => $theme.cardBackground};

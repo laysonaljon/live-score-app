@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useMatches } from '../hooks/useMatches';
 import FilterBar from '../components/FilterBar';
 import MatchCard from '../components/MatchCard';
-import { media, flexCenter, transition } from '../styles/mixins';
+import { media, flexCenter } from '../styles/mixins';
 
 const MainContainer = styled.div`
   ${flexCenter('column')}
@@ -40,7 +40,7 @@ const Message = styled.p`
   color: ${(props) => props.theme.textPrimary};
   text-align: center;
   margin-top: 2rem;
-  ${transition('color 0.3s ease')}
+  ${flexCenter('column')}
 `;
 
 const Home: React.FC = () => {
@@ -71,15 +71,15 @@ const Home: React.FC = () => {
           onFilterChange={handleFilterChange}
         />
 
-        <MatchList>
-          {filteredMatches.length > 0 ? (
-            filteredMatches.map((match) => (
+        {filteredMatches.length > 0 ? (
+          <MatchList>
+            {filteredMatches.map((match) => (
               <MatchCard key={match.id} match={match} />
-            ))
-          ) : (
+            ))}
+          </MatchList>
+        ) : (
             <Message>No matches found for the selected filter.</Message>
-          )}
-        </MatchList>
+        )}
       </MainContainer>
     </>
   );

@@ -152,14 +152,14 @@ export const CentralCircle = styled.div<{ $isLive: boolean; $isUpcoming?: boolea
 
     if (props.$isUpcoming) {
       return css`
-        border: 0.5px solid ${props.theme.textSecondary};
+        border: 1px solid ${props.theme.textSecondary};
         color: transparent;
         background: transparent;
       `;
     }
 
     return css`
-      border: 0.5px solid ${props.theme.liveProgress};
+      border: 1px solid ${props.theme.liveProgress};
       color: ${props.theme.liveProgress};
       background: transparent;
     `;
