@@ -28,7 +28,7 @@ export interface Team {
   name: string;
   slug: string;
   gender: string | null;
-  subTeams: any[];
+  subTeams: string[];
 }
 
 export interface Score {

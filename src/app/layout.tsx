@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState, useCallback } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Barlow } from 'next/font/google';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { lightTheme, darkTheme } from '../styles/theme';
