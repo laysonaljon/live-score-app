@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState, useCallback } from 'react';
 import { Barlow } from 'next/font/google';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { lightTheme, darkTheme } from '../styles/theme';
@@ -87,22 +87,14 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-interface RootLayoutProps {
-  children: ReactNode;
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+const useTheme = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
-    } else if (savedTheme === 'light') {
-      setIsDarkMode(false);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
-    }
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    setIsDarkMode(savedTheme === 'dark' || (!savedTheme && prefersDark));
   }, []);
 
   useEffect(() => {
@@ -110,15 +102,33 @@ export default function RootLayout({ children }: RootLayoutProps) {
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const toggleTheme = () => setIsDarkMode((prev) => !prev);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const toggleTheme = useCallback(() => setIsDarkMode(prev => !prev), []);
+
+  return { isDarkMode, toggleTheme, theme: isDarkMode ? darkTheme : lightTheme };
+};
+
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  const { isDarkMode, toggleTheme, theme } = useTheme();
 
   return (
     <html lang="en" className={barlow.variable}>
       <head>
-        <meta name="description" content="Live football scores with dark/light mode and Barlow font." />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Live football scores and match updates with real-time data" />
+        <meta name="keywords" content="football, soccer, live scores, matches, sports" />
+        <meta name="author" content="Aljon Layson" />
+        <meta property="og:title" content="Live Score App" />
+        <meta property="og:description" content="Get real-time football scores and match updates" />
+        <meta property="og:type" content="website" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <title>Live Score App</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <title>Live Score App - Real-time Football Scores</title>
       </head>
       <body>
         <ThemeProvider theme={theme}>

@@ -1,22 +1,27 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Match, FilterType } from '../types';
 import { fetchMatches } from '../services/api';
 
+const STATUS_FILTERS: Record<FilterType, string | null> = {
+  All: null,
+  Result: 'finished',
+  Live: 'inprogress',
+  Upcoming: 'notstarted',
+};
+
 export const useMatches = () => {
   const [matches, setMatches] = useState<Match[]>([]);
-  const [filteredMatches, setFilteredMatches] = useState<Match[]>([]);
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getMatches = async () => {
-      setLoading(true);
-      setError(null);
+    const loadMatches = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const data = await fetchMatches();
         setMatches(data);
-        setFilteredMatches(data);
       } catch (err) {
         setError('Failed to load matches.');
         console.error(err);
@@ -24,44 +29,29 @@ export const useMatches = () => {
         setLoading(false);
       }
     };
-    getMatches();
+    loadMatches();
   }, []);
 
-  // Memoize filter counts to avoid recalculating on every render
+  const filteredMatches = useMemo(() => {
+    const filterStatus = STATUS_FILTERS[activeFilter];
+    return filterStatus ? matches.filter(m => m.status.type === filterStatus) : matches;
+  }, [matches, activeFilter]);
+
   const filterCounts = useMemo(() => {
-    const counts = {
-      All: matches.length,
-      Result: matches.filter((match) => match.status.type === 'finished').length,
-      Live: matches.filter((match) => match.status.type === 'inprogress').length,
-      Upcoming: matches.filter((match) => match.status.type === 'notstarted').length,
-    };
+    const counts = matches.reduce((acc, match) => {
+      const status = match.status.type;
+      if (status === 'finished') acc.Result++;
+      else if (status === 'inprogress') acc.Live++;
+      else if (status === 'notstarted') acc.Upcoming++;
+      return acc;
+    }, { All: matches.length, Result: 0, Live: 0, Upcoming: 0 });
+    
     return counts;
   }, [matches]);
 
-  useEffect(() => {
-    let currentFilteredMatches: Match[] = [];
-    switch (activeFilter) {
-      case 'All':
-        currentFilteredMatches = matches;
-        break;
-      case 'Result':
-        currentFilteredMatches = matches.filter((match) => match.status.type === 'finished');
-        break;
-      case 'Live':
-        currentFilteredMatches = matches.filter((match) => match.status.type === 'inprogress');
-        break;
-      case 'Upcoming':
-        currentFilteredMatches = matches.filter((match) => match.status.type === 'notstarted');
-        break;
-      default:
-        currentFilteredMatches = matches;
-    }
-    setFilteredMatches(currentFilteredMatches);
-  }, [activeFilter, matches]);
-
-  const handleFilterChange = (filter: FilterType) => {
+  const handleFilterChange = useCallback((filter: FilterType) => {
     setActiveFilter(filter);
-  };
+  }, []);
 
   return {
     filteredMatches,

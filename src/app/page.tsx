@@ -1,6 +1,7 @@
 'use client';
 
 import Head from 'next/head';
+import { memo, useMemo } from 'react';
 import styled from 'styled-components';
 import { useMatches } from '../hooks/useMatches';
 import FilterBar from '../components/FilterBar';
@@ -18,12 +19,12 @@ const MatchList = styled.section`
   width: 100%;
   gap: 1rem;
   grid-template-columns: 1fr;
-
+  
   ${media.tabletLandscapeUp`
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   `}
-
+  
   ${media.desktopUp`
     grid-template-columns: repeat(3, 1fr);
   `}
@@ -47,23 +48,25 @@ const Home: React.FC = () => {
     error,
   } = useMatches();
 
-  let content;
+  const filterProps = useMemo(() => ({
+    activeFilter,
+    filterCounts,
+    onFilterChange: handleFilterChange,
+  }), [activeFilter, filterCounts, handleFilterChange]);
 
-  if (loading) {
-    content = <Message>Loading matches...</Message>;
-  } else if (error) {
-    content = <Message>Error: {error}</Message>;
-  } else if (filteredMatches.length === 0) {
-    content = <Message>No matches found for the selected filter.</Message>;
-  } else {
-    content = (
+  const renderContent = () => {
+    if (loading) return <Message>Loading matches...</Message>;
+    if (error) return <Message>Error: {error}</Message>;
+    if (filteredMatches.length === 0) return <Message>No matches found.</Message>;
+    
+    return (
       <MatchList>
         {filteredMatches.map((match) => (
           <MatchCard key={match.id} match={match} />
         ))}
       </MatchList>
     );
-  }
+  };
 
   return (
     <>
@@ -72,17 +75,13 @@ const Home: React.FC = () => {
         <meta name="description" content="Live football scores" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      
       <MainContainer>
-        <FilterBar
-          activeFilter={activeFilter}
-          filterCounts={filterCounts}
-          onFilterChange={handleFilterChange}
-        />
-        {content}
+        <FilterBar {...filterProps} />
+        {renderContent()}
       </MainContainer>
     </>
   );
 };
 
-export default Home;
+export default memo(Home);
