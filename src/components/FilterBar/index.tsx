@@ -45,7 +45,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
           aria-label={isCollapsed ? 'Expand filters' : 'Collapse filters'}
           type="button"
         >
-          {isCollapsed ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
+          {isCollapsed ? <ChevronDownIcon size={20} /> : <ChevronUpIcon size={20} />}
         </ToggleButton>
       </FilterHeader>
       <FilterOptions $isCollapsed={isCollapsed}>

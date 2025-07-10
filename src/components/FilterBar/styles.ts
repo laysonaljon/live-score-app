@@ -66,7 +66,7 @@ export const FilterOptions = styled.div<{ $isCollapsed: boolean }>`
   overflow: hidden;
   ${transition('all 0.4s ease')};
   max-height: ${({ $isCollapsed }) => ($isCollapsed ? '0' : '500px')};
-  margin-top: 0.5rem;
+  margin-top: ${({ $isCollapsed }) => ($isCollapsed ? '0' : '0.5rem')};
 
   ${media.tabletPortraitUp`
     justify-content: space-between;
