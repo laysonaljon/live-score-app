@@ -31,10 +31,10 @@ describe('FilterBar', () => {
     activeFilter: 'All' as FilterType,
     onFilterChange: jest.fn(),
     filterCounts: {
-        All: 12,
-        Live: 3,
-        Result: 5,
-        Upcoming: 4,
+      All: 12,
+      Live: 3,
+      Result: 5,
+      Upcoming: 4,
     },
   };
 
@@ -56,7 +56,7 @@ describe('FilterBar', () => {
     });
 
     it('renders toggle button but it should be hidden via CSS on desktop', () => {
-      const { container } = renderWithTheme(<FilterBar {...mockProps} />);
+      renderWithTheme(<FilterBar {...mockProps} />);
       const toggleButton = screen.getByRole('button', { name: /expand filters|collapse filters/i });
       expect(toggleButton).toBeInTheDocument();
       
@@ -129,17 +129,16 @@ describe('FilterBar', () => {
 
     it('calls onFilterChange when a filter is clicked', () => {
       renderWithTheme(<FilterBar {...mockProps} />);
-      const liveButton = screen.getByText('Live');
-      fireEvent.click(liveButton);
-      expect(mockProps.onFilterChange).toHaveBeenCalledWith('Live');
+      const resultButton = screen.getByText('Result');
+      fireEvent.click(resultButton);
+      expect(mockProps.onFilterChange).toHaveBeenCalledWith('Result');
     });
   });
 
   it('shows the correct count for each filter', () => {
     renderWithTheme(<FilterBar {...mockProps} />);
-    expect(screen.getByText('All')).toHaveTextContent('All');
-    expect(screen.getByText('Live')).toBeInTheDocument();
-    expect(screen.getByText('Result')).toBeInTheDocument();
-    expect(screen.getByText('Upcoming')).toBeInTheDocument();
+    ['All', 'Live', 'Result', 'Upcoming'].forEach((label) => {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    });
   });
 });
