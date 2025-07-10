@@ -14,7 +14,6 @@ export interface Match {
   };
   round: {
     round: number;
-    name?: string;
   };
   homeTeam: Team;
   awayTeam: Team;
