@@ -7,21 +7,15 @@ import FilterBar from '../components/FilterBar';
 import MatchCard from '../components/MatchCard';
 import { media, flexCenter } from '../styles/mixins';
 
-const MainContainer = styled.div`
-  ${flexCenter('column')}
+const MainContainer = styled.main`
+  ${flexCenter('column')};
   width: 100%;
-  padding: 1rem;
   gap: 2rem;
-
-  ${media.tabletPortraitUp`
-    padding: 2rem;
-  `}
 `;
 
-const MatchList = styled.div`
+const MatchList = styled.section`
   display: grid;
   width: 100%;
-  max-width: 1200px;
   gap: 1rem;
   grid-template-columns: 1fr;
 
@@ -37,7 +31,7 @@ const MatchList = styled.div`
 
 const Message = styled.p`
   font-size: 1.2rem;
-  color: ${(props) => props.theme.textPrimary};
+  color: ${({ theme }) => theme.textPrimary};
   text-align: center;
   margin-top: 2rem;
   ${flexCenter('column')}
@@ -53,8 +47,23 @@ const Home: React.FC = () => {
     error,
   } = useMatches();
 
-  if (loading) return <Message>Loading matches...</Message>;
-  if (error) return <Message>Error: {error}</Message>;
+  let content;
+
+  if (loading) {
+    content = <Message>Loading matches...</Message>;
+  } else if (error) {
+    content = <Message>Error: {error}</Message>;
+  } else if (filteredMatches.length === 0) {
+    content = <Message>No matches found for the selected filter.</Message>;
+  } else {
+    content = (
+      <MatchList>
+        {filteredMatches.map((match) => (
+          <MatchCard key={match.id} match={match} />
+        ))}
+      </MatchList>
+    );
+  }
 
   return (
     <>
@@ -70,16 +79,7 @@ const Home: React.FC = () => {
           filterCounts={filterCounts}
           onFilterChange={handleFilterChange}
         />
-
-        {filteredMatches.length > 0 ? (
-          <MatchList>
-            {filteredMatches.map((match) => (
-              <MatchCard key={match.id} match={match} />
-            ))}
-          </MatchList>
-        ) : (
-            <Message>No matches found for the selected filter.</Message>
-        )}
+        {content}
       </MainContainer>
     </>
   );

@@ -59,11 +59,10 @@ const GlobalStyles = createGlobalStyle`
 
   header {
     width: 100%;
-    max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: 1rem;
     margin-bottom: 1rem;
     border-bottom: 1px solid ${({ theme }) => theme.border};
 
@@ -76,7 +75,6 @@ const GlobalStyles = createGlobalStyle`
     font-size: 2.5rem;
     font-weight: 700;
     color: ${({ theme }) => theme.primary};
-    text-align: center;
 
     ${media.phonePortraitOnly`
       font-size: 2rem;
@@ -85,7 +83,6 @@ const GlobalStyles = createGlobalStyle`
 
   main {
     width: 100%;
-    max-width: 1200px;
     ${flexCenter('column')}
   }
 `;

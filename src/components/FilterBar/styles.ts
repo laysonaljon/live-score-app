@@ -7,7 +7,6 @@ export const FilterWrapper = styled.div`
   border: 1px solid ${(props) => props.theme.border};
   padding: 1rem;
   width: 100%;
-  max-width: 1200px;
   box-sizing: border-box;
 
   ${flexCenter('column')};
@@ -59,12 +58,15 @@ export const ToggleButton = styled.button<{ $isCollapsed: boolean }>`
 `;
 
 export const FilterOptions = styled.div<{ $isCollapsed: boolean }>`
-  margin-top: ${({ $isCollapsed }) => ($isCollapsed ? '0' : '0.5rem')};
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: flex-start;
+  overflow: hidden;
+  ${transition('all 0.4s ease')};
+  max-height: ${({ $isCollapsed }) => ($isCollapsed ? '0' : '500px')};
+  margin-top: 0.5rem;
 
   ${media.tabletPortraitUp`
     justify-content: space-between;
@@ -79,8 +81,10 @@ export const FilterOptions = styled.div<{ $isCollapsed: boolean }>`
   }
 
   ${media.desktopUp`
-    display: flex !important;
-    flex-wrap: wrap !important;
+    max-height: none;
+    overflow: visible;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 1.5rem;
   `}
@@ -98,7 +102,7 @@ export const FilterButton = styled.button<{ $isActive: boolean }>`
       p.$isActive ? p.theme.filterActiveBg : p.theme.filterGray};
   padding: 0.6rem 1rem;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 300;
   cursor: pointer;
   box-sizing: border-box;
   flex: 1 1 0;
@@ -138,7 +142,6 @@ export const FilterCount = styled.span`
   padding: 0.2rem 0.6rem;
   border-radius: 4px;
   font-size: 0.75rem;
-  font-weight: 700;
   min-width: 25px;
   text-align: center;
   margin-left: 8px;
