@@ -5,9 +5,11 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../styles/theme';
 
 jest.mock('../ThemeToggle', () => {
-  return ({ toggleTheme }: { toggleTheme: () => void }) => (
+  const MockThemeToggle = ({ toggleTheme }: { toggleTheme: () => void }) => (
     <button onClick={toggleTheme}>Toggle Theme</button>
   );
+  MockThemeToggle.displayName = 'MockThemeToggle';
+  return MockThemeToggle;
 });
 
 describe('Header', () => {
