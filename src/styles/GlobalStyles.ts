@@ -1,7 +1,7 @@
 'use client';
 
 import { createGlobalStyle } from 'styled-components';
-import { transition, flexCenter, media } from './mixins';
+import { transition, flexCenter } from './mixins';
 
 const GlobalStyles = createGlobalStyle`
   *, *::before, *::after {
@@ -27,7 +27,6 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.textPrimary};
     line-height: 1.6;
     ${transition('background-color 0.3s ease, color 0.3s ease')}
-    /* Prevent flash of unstyled content */
     opacity: 0;
     animation: fadeIn 0.3s ease-in-out forwards;
   }
@@ -60,7 +59,6 @@ const GlobalStyles = createGlobalStyle`
     ${transition('background-color 0.3s ease, color 0.3s ease')};
   }
 
-  /* Header styles are now defined in AppHeader.tsx, but global styling for main could remain here */
   main {
     width: 100%;
     ${flexCenter('column')}
